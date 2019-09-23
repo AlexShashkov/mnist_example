@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 
 from log_methods import *
+from datamanager import *
 
 m = 60000
 m_test = 10000
@@ -12,52 +13,7 @@ n = 784
 alpha = 0.3
 iterations = 500
 
-training = np.empty([m, n], dtype=np.float64)
-testing = np.empty([m_test, n], dtype=np.float64)
-
-path = 'training'
-y_train = np.array([int(directory) for directory in os.listdir(path) for file in os.listdir(path+'/'+directory)])#.reshape([m, 1])
-path = 'testing'
-y_test = np.array([int(directory) for directory in os.listdir(path) for file in os.listdir(path+'/'+directory)])#.reshape([m_test, 1])
-
-if not os.path.isfile('training.pkl'): 
-    path = 'training'
-    training_path = [path+'/'+directory+'/'+file for directory in os.listdir(path) for file in os.listdir(path+'/'+directory)]
-    y_train = [directory for directory in os.listdir(path) for file in os.listdir(path+'/'+directory)]
-    for i in range(m):
-        training[i, :] = cv2.imread(training_path[i],cv2.IMREAD_GRAYSCALE).flatten()
-
-    training = np.c_[np.ones(m), training]
-
-    with open('training.pkl', 'wb') as f:
-        pickle.dump(training, f)
-else:
-    with open('training.pkl', 'rb') as f:
-        training = pickle.load(f)
-
-
-if not os.path.isfile('testing.pkl'): 
-    path = 'testing'
-    testing_path = [path+'/'+directory+'/'+file for directory in os.listdir(path) for file in os.listdir(path+'/'+directory)]
-    for i in range(m_test):
-        testing[i, :] = cv2.imread(testing_path[i],cv2.IMREAD_GRAYSCALE).flatten()
-
-    testing = np.c_[np.ones(m_test), testing]
-
-    with open('testing.pkl', 'wb') as f:
-        pickle.dump(testing, f)
-else:
-    with open('testing.pkl', 'rb') as f:
-        testing = pickle.load(f)
-
-print('Выборки загружены.')
-print('Train set', training.shape)
-print('Test set', testing.shape)
-print('Train labels', y_train.shape)
-print('Test labels', y_test.shape)
-
-plotRandom(training, 'Train set')
-plotRandom(testing, 'Test set')
+training, testing, y_train, y_test = loadData(m, m_test, n, 'training', 'testing')
 
 theta = None
 theta2 = None

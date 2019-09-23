@@ -13,9 +13,9 @@ def loadImage(path, inv=False):
     img = cv2.resize(img, (28, 28))
     if inv:
         img = cv2.bitwise_not(img)
-    cv2.imshow('image',img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow('image',img)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     return img.flatten()
 
 def plotRandom(X, name, iter=10):
